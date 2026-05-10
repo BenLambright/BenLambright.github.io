@@ -3,47 +3,389 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Personal Project | Ben Lambright</title>
+    <title>Kathryn's Travel Fund</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
       :root {
-        color-scheme: light dark;
-        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        /* Scandinavian Aesthetic */
+        --bg-color: #f0f8fa; /* Icy light blue */
+        --card-bg: rgba(255, 255, 255, 0.9);
+        --text-main: #1a3644; /* Deep fjord blue/slate */
+        --text-muted: #5b7586;
+        --accent-green: #2a8f60; /* Forest green */
+        --accent-green-hover: #1f6b48;
+        --border-radius: 16px;
+        --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        font-family: 'Outfit', sans-serif;
       }
 
       body {
         margin: 0;
+        background-color: var(--bg-color);
+        color: var(--text-main);
         min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 2rem;
+        background-image: radial-gradient(circle at top right, #e0f2f5, transparent 40%),
+                          radial-gradient(circle at bottom left, #e6f7f0, transparent 40%);
+      }
+
+      header {
+        text-align: center;
+        padding: 4rem 2rem 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .back-link {
+        display: inline-block;
+        color: var(--accent-green);
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        transition: opacity 0.2s;
+      }
+      .back-link:hover { opacity: 0.8; }
+
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        margin: 0 0 1rem;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+
+      .subtitle {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        margin: 0 0 2rem;
+        line-height: 1.6;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3rem;
+      }
+
+      .btn-sort {
+        background-color: white;
+        border: 1px solid #cce3e8;
+        color: var(--text-main);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-family: inherit;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .btn-sort:hover {
+        border-color: var(--accent-green);
+        transform: translateY(-2px);
       }
 
       main {
-        width: min(720px, 100%);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem 4rem;
       }
 
-      h1 {
-        margin-top: 0;
-        font-size: clamp(1.75rem, 4vw, 2.5rem);
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2.5rem;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .card-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+      }
+
+      .card-content {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        gap: 1rem;
+      }
+
+      .card-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .card-cost {
+        background: #e8f5ee;
+        color: var(--accent-green);
+        font-weight: 700;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+
+      .card-notes {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 0.5rem;
+      }
+
+      .btn-venmo {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background-color: var(--accent-green);
+        color: white;
+        padding: 0.875rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.2s;
+        box-sizing: border-box;
+      }
+      .btn-venmo:hover {
+        background-color: var(--accent-green-hover);
+      }
+
+      /* Funded State Styles */
+      .card.is-funded {
+        border: 2px solid var(--accent-green);
+        background: rgba(240, 248, 250, 0.9);
+      }
+
+      .badge-funded {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: var(--accent-green);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        box-shadow: var(--shadow-sm);
+        z-index: 10;
+      }
+
+      .thank-you-note {
+        background-color: #e8f5ee;
+        border-left: 4px solid var(--accent-green);
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        font-style: italic;
+      }
+
+      .link-external {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        color: var(--accent-green);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+      .link-external:hover {
+        text-decoration: underline;
+      }
+
+      .btn-funded {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background-color: #cbd5e1;
+        color: #64748b;
+        padding: 0.875rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: not-allowed;
+        box-sizing: border-box;
+      }
+      
+      .action-area {
+        margin-top: auto;
       }
     </style>
   </head>
   <body>
-    <main>
-      <a href="index.html">← Back to Homepage</a>
-      <h1>Personal Project</h1>
-      <p>This page is reserved for hosting a personal project.</p>
+    <header>
+      <a href="index.html" class="back-link">← Back to Homepage</a>
+      <h1>Kathryn's Nordic Adventures</h1>
+      <p class="subtitle">Help fund my move to Finland and my travels around Scandinavia and the Baltic States! Check out the destinations below.</p>
+      
+      <div class="controls">
+        <button id="sortBtn" class="btn-sort">
+          Sort by Cost <span id="sortIcon">↕️</span>
+        </button>
+      </div>
+    </header>
 
-      <section aria-labelledby="project-outline-heading">
-        <h2 id="project-outline-heading">Skeleton Outline</h2>
-        <ul>
-          <li>Project title and description</li>
-          <li>Feature highlights</li>
-          <li>Demo / screenshots</li>
-          <li>Tech stack and architecture notes</li>
-          <li>Roadmap and next steps</li>
-        </ul>
-      </section>
+    <main>
+      <div id="cardGrid" class="card-grid">
+        <!-- Cards will be injected here by JavaScript -->
+      </div>
     </main>
+
+    <script>
+      // Embedded CSV Data
+      let destinations = [
+        {
+          location: "Summer bike pass",
+          type: "Other",
+          cost: 30,
+          link: "https://www.tampere.fi/en/current/2025/03/18/city-bike-season-starts-on-154-new-stations-west-and-single-trip-fee",
+          notes: "description stub",
+          thankYouNote: "",
+          image: "https://picsum.photos/seed/bike/800/600"
+        },
+        {
+          location: "Bus to Lapland to see northern lights or the sun that never sets",
+          type: "Activity",
+          cost: 100,
+          link: "https://shop.global.flixbus.com/search?departureCity=87205acf-f5ea-4ad6-b773-e1dc54b7db6c&arrivalCity=2e170532-5397-4d45-819b-8b3df5ca10ce&route=Jyvaskyla-Rovaniemi&rideDate=27.06.2026&backRideDate=27.06.2026&adult=1&_locale=en&backRide=1",
+          notes: "",
+          thankYouNote: "",
+          image: "https://picsum.photos/seed/lapland/800/600"
+        },
+        {
+          location: "Coffee and a Donut",
+          type: "Other",
+          cost: 10,
+          link: "https://www.munkkikahvila.net",
+          notes: "",
+          thankYouNote: "",
+          image: "https://picsum.photos/seed/coffee/800/600"
+        },
+        {
+          location: "smthg fun for a layover in Dublin",
+          type: "Activity",
+          cost: 50,
+          link: "https://www.viator.com/tours/Dublin/Wicklow-mountains-Glendalough-and-Kilkenny-Day-Tour-from-Dublin/d503-33832P1",
+          notes: "",
+          thankYouNote: "",
+          image: "https://picsum.photos/seed/dublin/800/600"
+        },
+        {
+          location: "Bus + Ferry to estonia (tallin)",
+          type: "Activity",
+          cost: 120,
+          link: "https://www.rome2rio.com/map/Tampere/Tallinn?route=Drive-ferry",
+          notes: "",
+          thankYouNote: "",
+          image: "https://picsum.photos/seed/tallinn/800/600"
+        }
+      ];
+
+      const venmoHandle = "Kathryn-Lambright-1";
+      let sortDirection = 0; // 0: initial, 1: asc, -1: desc
+
+      const gridElement = document.getElementById("cardGrid");
+      const sortBtn = document.getElementById("sortBtn");
+      const sortIcon = document.getElementById("sortIcon");
+
+      function renderCards(data) {
+        gridElement.innerHTML = "";
+        
+        data.forEach(item => {
+          // Construct Venmo URL
+          const venmoUrl = `https://venmo.com/${venmoHandle}?txn=pay&amount=${item.cost}&note=Trip+to+${encodeURIComponent(item.location)}`;
+          
+          let linkHtml = '';
+          if (item.link) {
+            linkHtml = `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="link-external">View Trip Details ↗</a>`;
+          }
+
+          let actionHtml = '';
+          let badgeHtml = '';
+          let thankYouHtml = '';
+          let fundedClass = '';
+
+          if (item.thankYouNote && item.thankYouNote.trim() !== '') {
+            fundedClass = 'is-funded';
+            badgeHtml = `<div class="badge-funded">🎉 Funded!</div>`;
+            thankYouHtml = `<div class="thank-you-note">"${item.thankYouNote}"</div>`;
+            actionHtml = `<div class="btn-funded">Funded!</div>`;
+          } else {
+            actionHtml = `<a href="${venmoUrl}" target="_blank" rel="noopener noreferrer" class="btn-venmo">Fund this trip</a>`;
+          }
+
+          const card = document.createElement("div");
+          card.className = `card ${fundedClass}`;
+          
+          card.innerHTML = `
+            ${badgeHtml}
+            <img src="${item.image}" alt="${item.location}" class="card-image" loading="lazy" />
+            <div class="card-content">
+              <div class="card-header">
+                <h2 class="card-title">${item.location}</h2>
+                <span class="card-cost">$${item.cost}</span>
+              </div>
+              <p class="card-notes">${item.notes}</p>
+              ${linkHtml}
+              <div class="action-area">
+                ${actionHtml}
+                ${thankYouHtml}
+              </div>
+            </div>
+          `;
+          
+          gridElement.appendChild(card);
+        });
+      }
+
+      function handleSort() {
+        if (sortDirection === 0 || sortDirection === -1) {
+          // Sort Ascending
+          destinations.sort((a, b) => a.cost - b.cost);
+          sortDirection = 1;
+          sortIcon.textContent = "↑";
+        } else {
+          // Sort Descending
+          destinations.sort((a, b) => b.cost - a.cost);
+          sortDirection = -1;
+          sortIcon.textContent = "↓";
+        }
+        renderCards(destinations);
+      }
+
+      // Initialize
+      sortBtn.addEventListener("click", handleSort);
+      renderCards(destinations);
+    </script>
   </body>
 </html>
